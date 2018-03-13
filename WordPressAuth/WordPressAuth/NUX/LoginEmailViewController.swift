@@ -1,5 +1,7 @@
 import UIKit
 import GoogleSignIn
+import WordPressShared
+
 
 /// This is the first screen following the log in prologue screen if the user chooses to log in.
 ///
@@ -319,7 +321,7 @@ class LoginEmailViewController: LoginViewController, NUXKeyboardResponder {
             },
                                       failure: { [weak self] (error: Error) in
                                         WordPressAuthenticator.post(event: .loginFailed(error: error))
-                                        DDLogError(error.localizedDescription)
+                                        NSLog(error.localizedDescription)
                                         guard let strongSelf = self else {
                                             return
                                         }

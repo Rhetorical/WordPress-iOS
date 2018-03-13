@@ -1,6 +1,7 @@
 import UIKit
 import wpxmlrpc
 import SafariServices
+import CocoaLumberjack
 
 
 extension FancyAlertViewController {
@@ -66,7 +67,7 @@ extension FancyAlertViewController {
     static func alertForError(_ error: NSError, loginFields: LoginFields, sourceTag: WordPressSupportSourceTag) -> FancyAlertViewController {
         var message = error.localizedDescription
 
-        DDLogError(message)
+        NSLog(message)
 
         if sourceTag == .jetpackLogin && error.domain == WordPressAppErrorDomain && error.code == NSURLErrorBadURL {
             if WordPressAuthenticator.shared.delegate?.livechatActionEnabled == true {

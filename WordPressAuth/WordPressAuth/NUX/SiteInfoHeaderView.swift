@@ -1,4 +1,6 @@
 import UIKit
+import WordPressShared
+
 
 /// A subclass of BlogDetailHeaderView styled for use in the login flow.
 ///

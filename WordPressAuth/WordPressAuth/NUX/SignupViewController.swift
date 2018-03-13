@@ -456,7 +456,7 @@ import SafariServices
                 return
             }
 
-            DDLogError("Failed to use 1Password App Extension to save a new Login: \(error)")
+            NSLog("Failed to use 1Password App Extension to save a new Login: \(error)")
             WPAnalytics.track(.onePasswordFailed)
         })
     }

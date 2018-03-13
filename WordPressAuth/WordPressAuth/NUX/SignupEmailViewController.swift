@@ -1,4 +1,7 @@
 import UIKit
+import CocoaLumberjack
+import WordPressShared
+
 
 class SignupEmailViewController: LoginViewController, NUXKeyboardResponder {
 
@@ -138,7 +141,7 @@ class SignupEmailViewController: LoginViewController, NUXKeyboardResponder {
 
         // If cannot get Remote, display generic error message.
         guard let remote = AccountServiceRemoteREST(wordPressComRestApi: WordPressComRestApi()) else {
-            DDLogError("Error creating AccountServiceRemoteREST instance.")
+            NSLog("Error creating AccountServiceRemoteREST instance.")
             self.displayError(message: ErrorMessage.availabilityCheckFail.description())
             completion(false)
             return
@@ -152,7 +155,7 @@ class SignupEmailViewController: LoginViewController, NUXKeyboardResponder {
             completion(available)
         }, failure: { error in
             if let error = error {
-                DDLogError("Error checking email availability: \(error.localizedDescription)")
+                NSLog("Error checking email availability: \(error.localizedDescription)")
             }
             // If check failed, display generic error message.
             self.displayError(message: ErrorMessage.availabilityCheckFail.description())
@@ -184,7 +187,7 @@ class SignupEmailViewController: LoginViewController, NUXKeyboardResponder {
                                     self?.configureSubmitButton(animating: false)
 
             }, failure: { [weak self] (error: Error) in
-                DDLogError("Request for signup link email failed.")
+                NSLog("Request for signup link email failed.")
                 WPAppAnalytics.track(.signupMagicLinkFailed)
                 self?.displayError(message: ErrorMessage.magicLinkRequestFail.description())
                 self?.configureSubmitButton(animating: false)

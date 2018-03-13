@@ -150,7 +150,7 @@ class LoginViewController: NUXViewController, LoginFacadeDelegate {
             WordPressAuthenticator.post(event: .loginSocialConnectSuccess)
             WordPressAuthenticator.post(event: .loginSocialSuccess)
         }, failure: { error in
-            DDLogError(error.description)
+            NSLog(error.description)
             WordPressAuthenticator.post(event: .loginSocialConnectFailure(error: error))
             // We're opting to let this call fail silently.
             // Our user has already successfully authenticated and can use the app --

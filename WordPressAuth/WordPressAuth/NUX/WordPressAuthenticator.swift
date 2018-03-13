@@ -196,12 +196,12 @@ public protocol WordPressAuthenticatorDelegate: class {
     ///
     @objc class func openAuthenticationURL(_ url: URL, fromRootViewController rootViewController: UIViewController) -> Bool {
         guard let token = url.query?.dictionaryFromQueryString().string(forKey: "token") else {
-            DDLogError("Signin Error: The authentication URL did not have the expected path.")
+            NSLog("Signin Error: The authentication URL did not have the expected path.")
             return false
         }
 
         guard let loginFields = retrieveLoginInfoForTokenAuth() else {
-            DDLogInfo("App opened with authentication link but info wasn't found for token.")
+            NSLog("App opened with authentication link but info wasn't found for token.")
             return false
         }
 
@@ -210,14 +210,14 @@ public protocol WordPressAuthenticatorDelegate: class {
             // The only time we should expect a magic link login when there is already a default wpcom account
             // is when a user is logging into Jetpack.
             if !loginFields.meta.jetpackLogin {
-                DDLogInfo("App opened with authentication link but there is already an existing wpcom account. \(account)")
+                NSLog("App opened with authentication link but there is already an existing wpcom account. \(account)")
                 return false
             }
         }
 
         let storyboard = UIStoryboard(name: "EmailMagicLink", bundle: nil)
         guard let loginController = storyboard.instantiateViewController(withIdentifier: "LinkAuthView") as? NUXLinkAuthViewController else {
-            DDLogInfo("App opened with authentication link but couldn't create login screen.")
+            NSLog("App opened with authentication link but couldn't create login screen.")
             return false
         }
         loginController.loginFields = loginFields
@@ -396,7 +396,7 @@ public protocol WordPressAuthenticatorDelegate: class {
                 return
             }
 
-            DDLogError("OnePassword Error: \(error.localizedDescription)")
+            NSLog("OnePassword Error: \(error.localizedDescription)")
             WordPressAuthenticator.post(event: .onePasswordFailed)
         })
     }

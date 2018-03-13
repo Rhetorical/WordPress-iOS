@@ -1,5 +1,7 @@
 import UIKit
 import WordPressShared
+import wpxmlrpc
+
 
 /// Provides a form and functionality for signing a user in to WordPress.com
 ///

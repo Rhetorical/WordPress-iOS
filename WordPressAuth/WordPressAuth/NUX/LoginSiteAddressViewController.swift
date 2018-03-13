@@ -1,4 +1,6 @@
 import UIKit
+import WordPressShared
+import WordPressKit
 
 class LoginSiteAddressViewController: LoginViewController, NUXKeyboardResponder {
     @IBOutlet weak var siteURLField: WPWalkthroughTextField!
@@ -150,7 +152,7 @@ class LoginSiteAddressViewController: LoginViewController, NUXKeyboardResponder 
             guard let error = error, let strongSelf = self else {
                 return
             }
-            DDLogError(error.localizedDescription)
+            NSLog(error.localizedDescription)
             WordPressAuthenticator.post(event: .loginFailedToGuessXMLRPC(error: error))
             WordPressAuthenticator.post(event: .loginFailed(error: error))
             strongSelf.configureViewLoading(false)

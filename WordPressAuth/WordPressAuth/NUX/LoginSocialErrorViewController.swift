@@ -1,5 +1,6 @@
 import Foundation
 import Gridicons
+import WordPressShared
 
 @objc
 protocol LoginSocialErrorViewControllerDelegate {

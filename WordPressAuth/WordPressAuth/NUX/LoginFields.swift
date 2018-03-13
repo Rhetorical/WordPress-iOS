@@ -1,5 +1,6 @@
 import Foundation
 import GoogleSignIn
+import WordPressKit
 
 /// LoginFields is a state container for user textfield input on the login screens
 /// as well as other meta data regarding the nature of a login attempt.
