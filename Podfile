@@ -92,6 +92,28 @@ target 'WordPress' do
   end
 end
 
+target 'WordPressAuth' do
+  project 'WordPressAuth/WordPressAuth.xcodeproj'
+
+  # Automattic Dependencies
+  #
+  pod 'Gridicons', '0.14'
+
+  # 3rd Party Dependencies
+  #
+  pod 'AFNetworking', '3.1.0'
+  pod 'Alamofire', '4.6.0'
+  pod 'CocoaLumberjack', '3.4.1'
+  pod 'GoogleSignIn', '4.1.1'
+  pod 'lottie-ios', '1.5.1'
+  pod 'NSURL+IDN', '0.3'
+  pod 'SVProgressHUD', '2.2.2'
+  pod 'wpxmlrpc', '0.8.3'
+
+  target 'WordPressAuthTests' do
+    inherit! :search_paths
+  end
+end
 
 target 'WordPressComStatsiOS' do
   project 'WordPressComStatsiOS/WordPressComStatsiOS.xcodeproj'
