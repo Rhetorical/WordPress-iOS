@@ -1,6 +1,7 @@
 import UIKit
 import CocoaLumberjack
 import WordPressShared
+import WordPressKit
 
 
 class SignupEmailViewController: LoginViewController, NUXKeyboardResponder {

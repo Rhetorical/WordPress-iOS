@@ -2,6 +2,7 @@ import UIKit
 import wpxmlrpc
 import SafariServices
 import CocoaLumberjack
+import WordPressKit
 
 
 extension FancyAlertViewController {

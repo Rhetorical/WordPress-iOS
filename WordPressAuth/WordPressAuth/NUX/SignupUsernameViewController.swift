@@ -1,4 +1,6 @@
 import SVProgressHUD
+import WordPressShared
+
 
 protocol SignupUsernameViewControllerDelegate {
     func usernameSelected(_ username: String)
