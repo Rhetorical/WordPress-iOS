@@ -7,8 +7,16 @@
 //
 
 import Foundation
+import WordPressKit
 
 
 class AccountSettingsService {
-    
+
+    init(userID: Int, api: WordPressComRestApi) {
+
+    }
+
+    func suggestUsernames(base: String, completion: ([String]) -> ()) {
+
+    }
 }

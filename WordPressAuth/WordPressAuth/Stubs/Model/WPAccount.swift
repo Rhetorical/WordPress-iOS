@@ -8,6 +8,7 @@ class WPAccount: NSObject {
     var displayName = ""
     var email = ""
     var blogs = [Blog]()
+    var userID = NSNumber(integerLiteral: 1)
 
     var wordPressComRestApi: WordPressComRestApi!
 }
