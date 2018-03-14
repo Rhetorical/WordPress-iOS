@@ -102,6 +102,7 @@
 		B541E318205872FC00DFE3FF /* SignupService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B541E2F5205872FC00DFE3FF /* SignupService.swift */; };
 		B541E319205872FC00DFE3FF /* GravatarService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B541E2F6205872FC00DFE3FF /* GravatarService.swift */; };
 		B541E31B2058734600DFE3FF /* WordPressShared.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B541E31C2058734600DFE3FF /* WordPressShared.framework */; };
+		B5ABA5AC2059975700274690 /* AccountSettingsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5ABA5AB2059975700274690 /* AccountSettingsService.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -216,6 +217,7 @@
 		B541E2F5205872FC00DFE3FF /* SignupService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SignupService.swift; sourceTree = "<group>"; };
 		B541E2F6205872FC00DFE3FF /* GravatarService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GravatarService.swift; sourceTree = "<group>"; };
 		B541E31C2058734600DFE3FF /* WordPressShared.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = WordPressShared.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		B5ABA5AB2059975700274690 /* AccountSettingsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountSettingsService.swift; sourceTree = "<group>"; };
 		F2970E7FCC899ED6239BE1F9 /* Pods_WordPressAuthTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_WordPressAuthTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -362,10 +364,9 @@
 				B541E2CB205872FC00DFE3FF /* Tools */,
 				B541E2CE205872FC00DFE3FF /* FancyAlert */,
 				B541E2D3205872FC00DFE3FF /* Extensions */,
-				B541E2D9205872FC00DFE3FF /* ViewControllers */,
 				B541E2E1205872FC00DFE3FF /* Model */,
 				B541E2E9205872FC00DFE3FF /* New Group */,
-				B541E2EE205872FC00DFE3FF /* Views */,
+				B541E2EE205872FC00DFE3FF /* UI */,
 				B541E2F1205872FC00DFE3FF /* Services */,
 			);
 			path = Stubs;
@@ -403,14 +404,6 @@
 			path = Extensions;
 			sourceTree = "<group>";
 		};
-		B541E2D9205872FC00DFE3FF /* ViewControllers */ = {
-			isa = PBXGroup;
-			children = (
-				B541E2DA205872FC00DFE3FF /* RotationAwareNavigationViewController.swift */,
-			);
-			path = ViewControllers;
-			sourceTree = "<group>";
-		};
 		B541E2E1205872FC00DFE3FF /* Model */ = {
 			isa = PBXGroup;
 			children = (
@@ -434,18 +427,20 @@
 			path = "New Group";
 			sourceTree = "<group>";
 		};
-		B541E2EE205872FC00DFE3FF /* Views */ = {
+		B541E2EE205872FC00DFE3FF /* UI */ = {
 			isa = PBXGroup;
 			children = (
+				B541E2DA205872FC00DFE3FF /* RotationAwareNavigationViewController.swift */,
 				B541E2EF205872FC00DFE3FF /* BlogDetailHeaderView.swift */,
 			);
-			path = Views;
+			path = UI;
 			sourceTree = "<group>";
 		};
 		B541E2F1205872FC00DFE3FF /* Services */ = {
 			isa = PBXGroup;
 			children = (
 				B541E2F2205872FC00DFE3FF /* AccountService.swift */,
+				B5ABA5AB2059975700274690 /* AccountSettingsService.swift */,
 				B541E2F3205872FC00DFE3FF /* BlogService.swift */,
 				B541E2DD205872FC00DFE3FF /* BlogSyncFacade.swift */,
 				B541E2F6205872FC00DFE3FF /* GravatarService.swift */,
@@ -777,6 +772,7 @@
 				B541E2AF2058724400DFE3FF /* SignupUsernameViewController.swift in Sources */,
 				B541E30B205872FC00DFE3FF /* SiteInfo.swift in Sources */,
 				B541E301205872FC00DFE3FF /* SVProgressHUD+Helpers.swift in Sources */,
+				B5ABA5AC2059975700274690 /* AccountSettingsService.swift in Sources */,
 				B541E2982058724400DFE3FF /* NUXAbstractViewController.swift in Sources */,
 				B541E302205872FC00DFE3FF /* RotationAwareNavigationViewController.swift in Sources */,
 				B541E2FC205872FC00DFE3FF /* FlingableViewHandler.swift in Sources */,
