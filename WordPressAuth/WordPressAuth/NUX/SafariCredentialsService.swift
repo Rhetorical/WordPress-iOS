@@ -1,6 +1,7 @@
 import Foundation
 import CocoaLumberjack
 
+
 // MARK: - SafariCredentialsService
 //
 class SafariCredentialsService {
