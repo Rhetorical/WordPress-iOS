@@ -25,13 +25,16 @@ class NUXLinkAuthViewController: LoginViewController {
         }
 
         didSync = true // Make sure we don't call this twice by accident
-        syncWPCom(username: email, authToken: token, requiredMultifactor: false)
+
+        let endpoint = WordPressEndpoint.wpcom(username: email, authToken: token, isJetpackLogin: isJetpackLogin, multifactor: false)
+        syncWPCom(endpoint: endpoint)
 
         // Count this as success since we're authed. Even if there is a glitch
         // while syncing the user has valid credentials.
         if let linkSource = loginFields.meta.emailMagicLinkSource {
             switch linkSource {
             case .signup:
+                WordPressAuthenticator.post(event: .createdAccount)
                 WordPressAuthenticator.post(event: .signupMagicLinkSucceeded)
             case .login:
                 WordPressAuthenticator.post(event: .loginMagicLinkSucceeded)

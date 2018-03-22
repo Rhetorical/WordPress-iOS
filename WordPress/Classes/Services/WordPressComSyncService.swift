@@ -15,7 +15,7 @@ class WordPressComSyncService {
     ///     - onSuccess: Closure to be executed upon success.
     ///     - onFailure: Closure to be executed upon failure.
     ///
-    func syncWPCom(username: String, authToken: String, isJetpackLogin: Bool, onSuccess: @escaping (_ account: WPAccount) -> (), onFailure: @escaping (Error) -> ()) {
+    func syncWPCom(username: String, authToken: String, isJetpackLogin: Bool, onSuccess: @escaping (WPAccount) -> (), onFailure: @escaping (Error) -> ()) {
         let context = ContextManager.sharedInstance().mainContext
         let accountService = AccountService(managedObjectContext: context)
         let newAccount = accountService.createOrUpdateAccount(withUsername: username, authToken: authToken)

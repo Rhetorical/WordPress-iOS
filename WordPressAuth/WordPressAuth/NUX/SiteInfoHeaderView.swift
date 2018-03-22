@@ -19,7 +19,7 @@ class SiteInfoHeaderView: BlogDetailHeaderView {
         titleLabel.font = WPStyleGuide.fontForTextStyle(.subheadline, fontWeight: .semibold)
         titleLabel.textColor = WPStyleGuide.darkGrey()
 
-        subtitleLabel.font = UIFont.preferredFont(forTextStyle: .footnote)
+        subtitleLabel.font = WPStyleGuide.fontForTextStyle(.footnote)
         subtitleLabel.textColor = WPStyleGuide.darkGrey()
 
         blavatarImageView.layer.borderColor = WPStyleGuide.greyLighten20().cgColor
@@ -27,4 +27,14 @@ class SiteInfoHeaderView: BlogDetailHeaderView {
         blavatarImageView.tintColor = WPStyleGuide.greyLighten10()
     }
 
+}
+
+extension SiteInfoHeaderView {
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+
+        if previousTraitCollection?.preferredContentSizeCategory != traitCollection.preferredContentSizeCategory {
+            configureStyles()
+        }
+    }
 }

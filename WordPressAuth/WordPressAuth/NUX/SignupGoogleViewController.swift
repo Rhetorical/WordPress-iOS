@@ -21,6 +21,7 @@ class SignupGoogleViewController: LoginViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         titleLabel?.text = NSLocalizedString("Waiting for Google to complete…", comment: "Message shown on screen while waiting for Google to finish its signup process.")
+        WordPressAuthenticator.post(event: .createAccountInitiated)
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -82,13 +83,15 @@ extension SignupGoogleViewController: GIDSignInDelegate {
 
         let context = ContextManager.sharedInstance().mainContext
         let service = SignupService(managedObjectContext: context)
+        let endpoint = WordPressEndpoint.wpcom(username: email, authToken: token, isJetpackLogin: isJetpackLogin, multifactor: false)
+
         service.createWPComUserWithGoogle(token: token, success: { [weak self] (accountCreated) in
             SVProgressHUD.dismiss()
             if accountCreated {
                 self?.performSegue(withIdentifier: .showSignupEpilogue, sender: self)
                 WPAnalytics.track(.signupSocialSuccess)
             } else {
-                self?.showLoginEpilogue()
+                self?.showLoginEpilogue(for: endpoint)
                 WPAnalytics.track(.loginSocialSuccess)
             }
         }) { [weak self] (error) in

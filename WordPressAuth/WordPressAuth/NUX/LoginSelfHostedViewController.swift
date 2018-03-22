@@ -28,10 +28,6 @@ class LoginSelfHostedViewController: LoginViewController, NUXKeyboardResponder {
         }
     }
 
-    var gravatarProfile: GravatarProfile?
-    var userProfile: UserProfile?
-    @objc var blog: Blog?
-
 
     // MARK: - Lifecycle Methods
 
@@ -193,6 +189,7 @@ class LoginSelfHostedViewController: LoginViewController, NUXKeyboardResponder {
         siteHeaderView.isHidden = true
 
         siteAddressLabel.text = sanitizedSiteAddress(siteAddress: loginFields.siteAddress)
+        siteAddressLabel.adjustsFontForContentSizeCategory = true
     }
 
 
@@ -225,78 +222,7 @@ class LoginSelfHostedViewController: LoginViewController, NUXKeyboardResponder {
     }
 
 
-    // MARK: - Epilogue: Gravatar and User Profile Acquisition
-
-    override func showLoginEpilogue() {
-        guard let delegate = WordPressAuthenticator.shared.delegate, let navigationController = navigationController else {
-            fatalError()
-        }
-
-        configureViewLoading(false)
-        delegate.presentLoginEpilogue(in: navigationController, epilogueInfo: epilogueUserInfo(), isJetpackLogin: isJetpackLogin) { [weak self] in
-            self?.dismissBlock?(false)
-        }
-    }
-
-
-    /// Returns an instance of LoginEpilogueUserInfo composed from
-    /// a user's gravatar profile, and/or self-hosted blog profile.
-    ///
-    func epilogueUserInfo() -> LoginEpilogueUserInfo {
-        var info = LoginEpilogueUserInfo()
-        if let profile = gravatarProfile {
-            info.gravatarUrl = profile.thumbnailUrl
-            info.fullName = profile.displayName
-        }
-
-        // Whatever is in user profile trumps whatever is in the gravatar profile.
-        if let profile = userProfile {
-            info.username = profile.username
-            info.fullName = profile.displayName
-            info.email = profile.email
-        }
-
-        info.blog = blog
-
-        return info
-    }
-
-
-    /// Fetches the user's profile data from their blog. If success, it next queries
-    /// the user's gravatar profile data passing the completion block.
-    ///
-    private func fetchUserProfileInfo(username: String, password: String, xmlrpc: String, completion: @escaping (() -> Void )) {
-        guard let service = UsersService(username: username, password: password, xmlrpc: xmlrpc) else {
-            completion()
-            return
-        }
-
-        service.fetchProfile(success: { [weak self] profile in
-            self?.userProfile = profile
-            self?.fetchGravatarProfileInfo(email: profile.email, completion: completion)
-
-        }, failure: { [weak self] _ in
-            self?.showLoginEpilogue()
-        })
-    }
-
-
-    /// Queries the user's gravatar profile data. On success calls completion.
-    ///
-    private func fetchGravatarProfileInfo(email: String, completion: @escaping (() -> Void )) {
-        let service = GravatarService()
-
-        service.fetchProfile(email, success: { [weak self] profile in
-            self?.gravatarProfile = profile
-            completion()
-        }, failure: { [weak self] _ in
-            self?.showLoginEpilogue()
-        })
-    }
-
-
     // MARK: - Actions
-
 
     @IBAction func handleTextFieldDidChange(_ sender: UITextField) {
         loginFields.username = usernameField.nonNilTrimmedText()
@@ -322,12 +248,10 @@ class LoginSelfHostedViewController: LoginViewController, NUXKeyboardResponder {
         }
     }
 
-
     @IBAction func handleForgotPasswordButtonTapped(_ sender: UIButton) {
         WordPressAuthenticator.openForgotPasswordURL(loginFields)
         WordPressAuthenticator.post(event: .loginForgotPasswordClicked)
     }
-
 
     // MARK: - Keyboard Notifications
 
@@ -345,11 +269,6 @@ class LoginSelfHostedViewController: LoginViewController, NUXKeyboardResponder {
 
 extension LoginSelfHostedViewController {
 
-    override func finishedLogin(withUsername username: String, authToken: String, requiredMultifactorCode: Bool) {
-        syncWPCom(username: username, authToken: authToken, requiredMultifactor: requiredMultifactorCode)
-    }
-
-
     func finishedLogin(withUsername username: String, password: String, xmlrpc: String, options: [AnyHashable: Any]) {
         displayLoginMessage("")
 
@@ -357,14 +276,11 @@ extension LoginSelfHostedViewController {
             fatalError()
         }
 
-        delegate.syncWPOrg(username: username, password: password, xmlrpc: xmlrpc, options: options) { [weak self] in
+        let endpoint = WordPressEndpoint.wporg(username: username, password: password, xmlrpc: xmlrpc, options: options)
+        delegate.sync(endpoint: endpoint) { [weak self] _ in
 
             NotificationCenter.default.post(name: Foundation.Notification.Name(rawValue: WordPressAuthenticator.WPSigninDidFinishNotification), object: nil)
-
-            self?.blog = blog
-            self?.fetchUserProfileInfo(username: username, password: password, xmlrpc: xmlrpc) {
-                self?.showLoginEpilogue()
-            }
+            self?.showLoginEpilogue(for: endpoint)
         }
     }
 

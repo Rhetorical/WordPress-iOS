@@ -67,6 +67,17 @@ class Login2FAViewController: LoginViewController, NUXKeyboardResponder, UITextF
     }
 
 
+    /// MARK: Dynamic Type
+    override func didChangePreferredContentSize() {
+        super.didChangePreferredContentSize()
+        styleSendCodeButton()
+    }
+
+    private func styleSendCodeButton() {
+        sendCodeButton.titleLabel?.adjustsFontForContentSizeCategory = true
+        sendCodeButton.titleLabel?.adjustsFontSizeToFitWidth = true
+    }
+
     // MARK: Configuration Methods
 
 
@@ -153,7 +164,9 @@ class Login2FAViewController: LoginViewController, NUXKeyboardResponder, UITextF
     }
 
     func finishedLogin(withNonceAuthToken authToken: String) {
-        syncWPCom(username: loginFields.username, authToken: authToken, requiredMultifactor: true)
+        let endpoint = WordPressEndpoint.wpcom(username: loginFields.username, authToken: authToken, isJetpackLogin: isJetpackLogin, multifactor: true)
+        syncWPCom(endpoint: endpoint)
+
         // Disconnect now that we're done with Google.
         GIDSignIn.sharedInstance().disconnect()
         WordPressAuthenticator.post(event: .loginSocialSuccess)
