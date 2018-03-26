@@ -1653,6 +1653,8 @@ extension AztecPostViewController {
                 insertHorizontalRuler()
             case .more:
                 insertMore()
+            case .code:
+                toggleCode()
             }
 
             updateFormatBar()
@@ -2041,6 +2043,10 @@ extension AztecPostViewController {
         formatBar.overflowToolbar(expand: true)
 
         mode.toggle()
+    }
+
+    func toggleCode() {
+        richTextView.toggleCode(range: richTextView.selectedRange)
     }
 
     func toggleHeader(fromItem item: FormatBarItem) {
@@ -3137,8 +3143,12 @@ extension AztecPostViewController {
         guard let attachmentRange = richTextView.textStorage.ranges(forAttachment: attachment).first else {
             return
         }
+
+        let caption = richTextView.caption(for: attachment)
+
         let controller = AztecAttachmentViewController()
         controller.attachment = attachment
+        controller.caption = caption
         var oldURL: URL?
 
         if let linkRange = richTextView.linkFullRange(forRange: attachmentRange),
@@ -3148,17 +3158,28 @@ extension AztecPostViewController {
             controller.linkURL = url
         }
 
-        controller.onUpdate = { [weak self] (alignment, size, linkURL, alt) in
-            self?.richTextView.edit(attachment) { updated in
+        controller.onUpdate = { [weak self] (alignment, size, linkURL, alt, caption) in
+            guard let `self` = self else {
+                return
+            }
+
+            self.richTextView.edit(attachment) { updated in
                 updated.alignment = alignment
                 updated.size = size
                 updated.alt = alt
             }
+
+            if let caption = caption, caption.length > 0 {
+                self.richTextView.replaceCaption(for: attachment, with: caption)
+            } else {
+                self.richTextView.removeCaption(for: attachment)
+            }
+
             // Update associated link
             if let updatedURL = linkURL {
-                self?.richTextView.setLink(updatedURL, inRange: attachmentRange)
+                self.richTextView.setLink(updatedURL, inRange: attachmentRange)
             } else if oldURL != nil && linkURL == nil {
-                self?.richTextView.removeLink(inRange: attachmentRange)
+                self.richTextView.removeLink(inRange: attachmentRange)
             }
         }
 

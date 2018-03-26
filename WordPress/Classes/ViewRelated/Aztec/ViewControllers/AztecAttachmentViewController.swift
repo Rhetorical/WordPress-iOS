@@ -16,12 +16,13 @@ class AztecAttachmentViewController: UITableViewController {
         }
     }
 
+    var caption: NSAttributedString?
     var alignment = ImageAttachment.Alignment.none
     var linkURL: URL?
     var size = ImageAttachment.Size.none
     @objc var alt: String?
 
-    var onUpdate: ((_ alignment: ImageAttachment.Alignment, _ size: ImageAttachment.Size, _ linkURL: URL?, _ altText: String?) -> Void)?
+    var onUpdate: ((_ alignment: ImageAttachment.Alignment, _ size: ImageAttachment.Size, _ linkURL: URL?, _ altText: String?, _ captionText: NSAttributedString?) -> Void)?
     @objc var onCancel: (() -> Void)?
 
     fileprivate var handler: ImmuTableViewHandler!
@@ -91,6 +92,11 @@ class AztecAttachmentViewController: UITableViewController {
             value: alt ?? "",
             action: displayAltTextfield)
 
+        let captionRow = EditableAttributedTextRow(
+            title: NSLocalizedString("Caption", comment: "Image caption attribute option title."),
+            value: caption ?? NSAttributedString(),
+            action: displayCaptionTextfield)
+
         return ImmuTable(sections: [
             ImmuTableSection(
                 headerText: displaySettingsHeader,
@@ -98,7 +104,8 @@ class AztecAttachmentViewController: UITableViewController {
                     alignmentRow,
                     linkToRow,
                     sizeRow,
-                    altRow
+                    altRow,
+                    captionRow,
                 ],
                 footerText: nil)
             ])
@@ -110,6 +117,15 @@ class AztecAttachmentViewController: UITableViewController {
     private func displayAltTextfield(row: ImmuTableRow) {
         let editableRow = row as! EditableTextRow
         let hint = NSLocalizedString("Image Alt", comment: "Hint for image alt on image settings.")
+        self.pushSettingsController(for: editableRow, hint: hint, settingsTextMode: .text) { value in
+            self.alt = value
+            self.tableView.reloadData()
+        }
+    }
+
+    private func displayCaptionTextfield(row: ImmuTableRow) {
+        let editableRow = row as! EditableAttributedTextRow
+        let hint = NSLocalizedString("Caption", comment: "Hint for image caption on image settings.")
         self.pushSettingsController(for: editableRow, hint: hint, settingsTextMode: .text) { value in
             self.alt = value
             self.tableView.reloadData()
@@ -199,11 +215,26 @@ class AztecAttachmentViewController: UITableViewController {
 
     @objc func handleDoneButtonTapped(sender: UIBarButtonItem) {
         let checkedAlt = alt == "" ? nil : alt
-        onUpdate?(alignment, size, linkURL, checkedAlt)
+        onUpdate?(alignment, size, linkURL, checkedAlt, caption)
         dismiss(animated: true, completion: nil)
     }
 
     private func pushSettingsController(for row: EditableTextRow,
+                                        hint: String? = nil,
+                                        settingsTextMode: SettingsTextModes,
+                                        onValueChanged: @escaping SettingsTextChanged) {
+        let title = row.title
+        let value = row.value
+        let controller = SettingsTextViewController(text: value, placeholder: "\(title)...", hint: hint)
+
+        controller.title = title
+        controller.mode = settingsTextMode
+        controller.onValueChanged = onValueChanged
+
+        navigationController?.pushViewController(controller, animated: true)
+    }
+
+    private func pushSettingsController(for row: EditableAttributedTextRow,
                                         hint: String? = nil,
                                         settingsTextMode: SettingsTextModes,
                                         onValueChanged: @escaping SettingsTextChanged) {
